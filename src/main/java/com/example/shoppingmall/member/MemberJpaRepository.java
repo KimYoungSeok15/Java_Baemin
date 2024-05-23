@@ -13,7 +13,7 @@ public interface MemberJpaRepository extends
 
     Member findByUserId(String userId);
 
-    Member saveByUserId(String userId);
+    Member save(String userId);
 
     Member findById(int id);
 }
