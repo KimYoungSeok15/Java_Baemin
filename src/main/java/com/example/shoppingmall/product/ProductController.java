@@ -1,5 +1,6 @@
 package com.example.shoppingmall.product;
 
+import com.example.shoppingmall.utils.ApiUtils;
 import com.example.shoppingmall.utils.Validator;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -7,8 +8,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -22,22 +25,11 @@ public class ProductController {
 
     // 상품 개별 등록
     @PostMapping("/products")
-    public ResponseEntity registerProduct(@RequestBody Product product) {
+    public ApiUtils.ApiResult registerProduct(@RequestBody Product product, BindingResult bindingResult) {
 
-        if(Validator.isAlpha(product.getName()) &&
-                Validator.isNumber(product.getPrice())) {
-            log.info(product.getName());
-
-            Product savedProduct = productService.registerProduct(product);
-
-            try {
-                log.info(savedProduct.getName());
-            } catch (NullPointerException e) {
-                return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-            }
-            return new ResponseEntity<>(HttpStatus.CREATED);
-        } else
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        Product savedProduct = productService.registerProduct(product);
+        Map<String, String> errors = new HashMap<>();
+        return ApiUtils.error(errors, HttpStatus.BAD_REQUEST);
     }
 
     // 상품 개별 조회

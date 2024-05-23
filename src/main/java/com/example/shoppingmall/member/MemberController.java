@@ -31,9 +31,9 @@ public class MemberController {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ApiUtils.ApiResult<Map<String, String>>  handleValidationExceptions(MethodArgumentNotValidException errors) {
+    public ApiUtils.ApiResult<Map<String, String>> handleValidationExceptions(MethodArgumentNotValidException errors) {
         Map<String, String> errorMap = new HashMap<>();
-        errors.getAllErrors().forEach(error -> {
+        errors.getBindingResult().getAllErrors().forEach(error -> {
             String fieldName = ((FieldError) error).getField();
             String errorMessage = error.getDefaultMessage();
             errorMap.put(fieldName, errorMessage);
@@ -53,16 +53,16 @@ public class MemberController {
 //    }
 
     @PostMapping("/join") // After
-    public ApiUtils.ApiResult join(@Valid @RequestBody MemberDTO memberDTO, BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) {
-            Map<String, String> errors = new HashMap<>();
-            bindingResult.getAllErrors().forEach(error -> {
-                String fieldName = ((FieldError) error).getField();
-                String errorMessage = error.getDefaultMessage();
-                errors.put(fieldName, errorMessage);
-            });
-            return ApiUtils.error(errors, HttpStatus.BAD_REQUEST);
-        }
+    public ApiUtils.ApiResult join(@RequestBody @Valid MemberDTO memberDTO) {
+//        if (bindingResult.hasErrors()) {
+//            Map<String, String> errors = new HashMap<>();
+//            bindingResult.getAllErrors().forEach(error -> {
+//                String fieldName = ((FieldError) error).getField();
+//                String errorMessage = error.getDefaultMessage();
+//                errors.put(fieldName, errorMessage);
+//            });
+//            return ApiUtils.error(errors, HttpStatus.BAD_REQUEST);
+//        }
 
         Map<String, String> errorMessage = new HashMap<>();
         if(isDuplicateId(memberDTO)) {

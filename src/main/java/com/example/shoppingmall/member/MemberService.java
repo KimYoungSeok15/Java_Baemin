@@ -21,10 +21,7 @@ public class MemberService {
         Member existMember
             = memberRepository.findByUserId(userId);
 
-        if (existMember == null)
-            return false;
-        else
-            return true;
+        return existMember != null;
     }
 
 //    public void makeConnection() {

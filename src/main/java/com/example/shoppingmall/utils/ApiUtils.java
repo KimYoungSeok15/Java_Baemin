@@ -6,7 +6,7 @@ import org.springframework.http.HttpStatus;
 
 import java.util.Map;
 
-public class ApiUtils<T> {
+public class ApiUtils {
     public static <T> ApiResult<T> success(T data) {
         return new ApiResult<>(true, data, null);
     }
